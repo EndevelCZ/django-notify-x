@@ -33,7 +33,7 @@ def notification_redirect(request, ctx):
         next_page = request.POST.get('next', reverse('notifications:all'))
         if not ctx['success']:
             return HttpResponseBadRequest(ctx['msg'])
-        if is_safe_url(next_page):
+        if is_safe_url(next_page, settings.ALLOWED_HOSTS):
             return HttpResponseRedirect(next_page)
         else:
             return HttpResponseRedirect(reverse('notifications:all'))
@@ -282,7 +282,7 @@ def read_and_redirect(request, notification_id):
     notification_page = reverse('notifications:all')
     next_page = request.GET.get('next', notification_page)
 
-    if is_safe_url(next_page):
+    if is_safe_url(next_page, settings.ALLOWED_HOSTS):
         target = next_page
     else:
         target = notification_page

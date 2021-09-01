@@ -14,7 +14,7 @@ The ``notifyX.js`` file handles all the AJAX related actions ranging from markin
 
 Now, include the ``notifyX.js`` static file in your base template.::
 
-    {% load staticfiles %}
+    {% load static %}
     ....
     <script src="{% static "notify/notifyX.js" %}"></script>
     <!-- OR -->

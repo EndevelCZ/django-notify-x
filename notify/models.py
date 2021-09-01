@@ -4,7 +4,6 @@ from django.db import models
 from django.conf import settings
 from django.db.models import QuerySet
 from jsonfield.fields import JSONField
-from six import python_2_unicode_compatible
 from django.utils.html import escape
 from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
@@ -135,7 +134,6 @@ class NotificationQueryset(QuerySet):
         return self.filter(deleted=True)
 
 
-@python_2_unicode_compatible
 class Notification(models.Model):
 
     """
