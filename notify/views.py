@@ -1,15 +1,12 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-try:
-    from django.core.urlresolvers import reverse
-except ImportError:
-    from django.urls import reverse
+from django.urls import reverse
 
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.http import is_safe_url
-from django.utils.translation import ugettext as _
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 from .models import Notification
 from .utils import render_notification
@@ -27,13 +24,13 @@ def notification_redirect(request, ctx):
 
     :returns: Either JSON for AJAX or redirects to the calculated next page.
     """
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         return JsonResponse(ctx)
     else:
         next_page = request.POST.get('next', reverse('notifications:all'))
         if not ctx['success']:
             return HttpResponseBadRequest(ctx['msg'])
-        if is_safe_url(next_page, settings.ALLOWED_HOSTS):
+        if url_has_allowed_host_and_scheme(next_page, settings.ALLOWED_HOSTS):
             return HttpResponseRedirect(next_page)
         else:
             return HttpResponseRedirect(reverse('notifications:all'))
@@ -282,7 +279,7 @@ def read_and_redirect(request, notification_id):
     notification_page = reverse('notifications:all')
     next_page = request.GET.get('next', notification_page)
 
-    if is_safe_url(next_page, settings.ALLOWED_HOSTS):
+    if url_has_allowed_host_and_scheme(next_page, settings.ALLOWED_HOSTS):
         target = next_page
     else:
         target = notification_page

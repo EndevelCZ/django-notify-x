@@ -4,10 +4,7 @@ from notify.models import Notification
 from notify.signals import notify
 from django.utils import timezone
 
-try:
-    from django.core.urlresolvers import reverse
-except ImportError:
-    from django.urls import reverse
+from django.urls import reverse
 
 import json
 from django.template import Template, Context, RequestContext

@@ -1,8 +1,5 @@
-try:
-    from django.conf.urls import url, include
-except ImportError:
-    from django.urls import url, include
+from django.urls import include, re_path
 
 urlpatterns = [
-    url(r'^', include('notify.urls', namespace='notifications')),
+    re_path(r'^', include('notify.urls', namespace='notifications')),
 ]
